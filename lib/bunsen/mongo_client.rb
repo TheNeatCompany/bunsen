@@ -15,6 +15,12 @@ module Bunsen
       @database = @client[database]
     end
 
+    def collections
+      @database.collections.map(&:name).reject do |collection_name|
+        collection_name.start_with?("system.")
+      end
+    end
+
     def touch(collection, touch_type = :both)
       should_touch_data = [:data, :both].include?(touch_type.to_sym)
       should_touch_index = [:index, :both].include?(touch_type.to_sym)

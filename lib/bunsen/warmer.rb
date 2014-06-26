@@ -20,14 +20,16 @@ module Bunsen
     end
 
     def touch_each_collection
-      @collections.each_with_index do |collection, enum_index|
-        yield @mongo_client.touch_data_in(collection), enum_index + 1, @collections.count
+      collections = @collections.any? ? @collections : @mongo_client.collections
+      collections.each_with_index do |collection, enum_index|
+        yield @mongo_client.touch_data_in(collection), enum_index + 1, collections.count
       end
     end
 
     def touch_each_index
-      @indexes.each_with_index do |collection, enum_index|
-        yield @mongo_client.touch_index_in(collection), enum_index + 1, @indexes.count
+      indexes = @indexes.any? ? @indexes : @mongo_client.collections
+      indexes.each_with_index do |collection, enum_index|
+        yield @mongo_client.touch_index_in(collection), enum_index + 1, indexes.count
       end
     end
   end

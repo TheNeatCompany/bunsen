@@ -13,11 +13,24 @@ module Bunsen
 
     desc "warm", "load collections or indexes into memory"
     
-    option :host, default: "localhost"
-    option :port, type: :numeric, default: 27017
-    option :database, required: true
-    option :collections, type: :array, default: []
-    option :indexes, type: :array, default: []
+    option :database,
+      desc: "MongoDB database name",
+      required: true
+    option :host,
+      desc: "MongoDB host name [localhost]",
+      default: "localhost"
+    option :port,
+      desc: "MongoDB connection port [27017]",
+      type: :numeric,
+      default: 27017
+    option :collections,
+      desc: "List of collections to read [all]",
+      type: :array,
+      default: []
+    option :indexes,
+      desc: "List of indexes to read [all]",
+      type: :array,
+      default: []
     
     def warm
       warmer = Bunsen::Warmer.new(
