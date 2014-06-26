@@ -6,5 +6,6 @@ gem 'bson_ext'
 gem 'formatador'
 
 group :development do
+  gem 'rake'
   gem 'pry'
 end
