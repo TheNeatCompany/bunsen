@@ -1,4 +1,5 @@
 require_relative 'mongo_client'
+require 'chronic'
 
 module Bunsen
   class Warmer
@@ -9,7 +10,8 @@ module Bunsen
     def initialize(database, collections = [], indexes = [], options = {})
       @options = {
         host: "localhost",
-        port: 27017
+        port: 27017,
+        not_before: nil
       }.merge(options)
 
       @database = database
@@ -23,7 +25,11 @@ module Bunsen
     def touch_each_collection
       collections = @collections.any? ? @collections : @all_collections_in_db
       collections.each_with_index do |collection, enum_index|
-        yield @mongo_client.touch_data_in(collection), enum_index + 1, collections.count
+        if @options[:not_before]
+          yield @mongo_client.touch_data_since(collection, not_before_nl_to_time), enum_index + 1, collections.count
+        else
+          yield @mongo_client.touch_data_in(collection), enum_index + 1, collections.count
+        end
       end
     end
 
@@ -32,6 +38,13 @@ module Bunsen
       indexes.each_with_index do |collection, enum_index|
         yield @mongo_client.touch_index_in(collection), enum_index + 1, indexes.count
       end
+    end
+
+
+    private
+
+    def not_before_nl_to_time
+      Chronic.parse(@options[:not_before]) or raise "can't make sense of time"
     end
   end
 end

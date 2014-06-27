@@ -36,8 +36,30 @@ module Bunsen
       touch(collection, :data)
     end
 
+    def touch_data_since(collection, time)
+      result = {
+        "ok" => 0,
+        "since" => time,
+        "count" => 0
+      }
+
+      @database[collection].find(
+        _id: { :$gte => time_to_bson_objectid(time) }
+      ).each { result["count"] += 1 }
+
+      result["ok"] = 1
+      result
+    end
+
     def touch_index_in(collection)
       touch(collection, :index)
+    end
+
+
+    private
+
+    def time_to_bson_objectid(time)
+      BSON::ObjectId.from_time(time)
     end
   end
 end
