@@ -71,22 +71,26 @@ module Bunsen
 
       unless options[:skip_collections]
         Formatador.display_line "[yellow]warming data:[/] #{options[:collections].join(' ')}"
+        start_time = Time.now
         warmer.touch_each_collection do |_, completed_count, total_count|
           Formatador.redisplay_progressbar(
             completed_count,
             total_count,
-            color: completed_count.eql?(total_count) ? "green" : "red"
+            color: completed_count.eql?(total_count) ? "green" : "red",
+            started_at: start_time
           )
         end
       end
 
       unless options[:skip_indexes]
         Formatador.display_line "[yellow]warming indexes:[/] #{options[:indexes].join(' ')}"
+        start_time = Time.now
         warmer.touch_each_index do |_, completed_count, total_count|
           Formatador.redisplay_progressbar(
             completed_count,
             total_count,
-            color: completed_count.eql?(total_count) ? "green" : "red"
+            color: completed_count.eql?(total_count) ? "green" : "red",
+            started_at: start_time
           )
         end
       end
