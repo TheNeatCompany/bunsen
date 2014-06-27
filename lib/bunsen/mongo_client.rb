@@ -13,12 +13,21 @@ module Bunsen
 
       @client = Mongo::MongoClient.new(@options[:host], @options[:port], slave_ok: true)
       @database = @client[database]
+      @admin_database = @client["admin"]
     end
 
     def collections
       @database.collections.map(&:name).reject do |collection_name|
         collection_name.start_with?("system.")
       end
+    end
+
+    def enable_maintenance_mode
+      @admin_database.command(replSetMaintenance: true)
+    end
+
+    def disable_maintenance_mode
+      @admin_database.command(replSetMaintenance: false)
     end
 
     def touch(collection, touch_type = :both)
@@ -57,6 +66,10 @@ module Bunsen
 
 
     private
+
+    def primary?
+      @client.primary?
+    end
 
     def time_to_bson_objectid(time)
       BSON::ObjectId.from_time(time)
