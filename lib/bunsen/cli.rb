@@ -1,6 +1,6 @@
 require 'thor'
 require 'formatador'
-require_relative '../bunsen'
+require 'bunsen'
 
 module Bunsen
   class CLI < Thor

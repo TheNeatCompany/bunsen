@@ -1,4 +1,4 @@
-require_relative 'mongo_client'
+require 'bunsen/mongo_client'
 require 'chronic'
 
 module Bunsen

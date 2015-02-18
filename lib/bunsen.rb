@@ -1,5 +1,5 @@
-require_relative 'bunsen/version'
-require_relative 'bunsen/warmer'
+require 'bunsen/version'
+require 'bunsen/warmer'
 
 module Bunsen
   class << self

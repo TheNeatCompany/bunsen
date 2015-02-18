@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require_relative '../lib/bunsen/cli'
+require 'bunsen/cli'
 
 Bunsen::CLI.start(ARGV)
