@@ -17,9 +17,7 @@ module Bunsen
     end
 
     def collections
-      @database.collections.map(&:name).reject do |collection_name|
-        collection_name.start_with?("system.")
-      end
+    %w(revisions entities accounts users workflow_item_in_processes item_files oauth2.access_tokens ocr_page_counts ocr_texts plan_adds plan_changes)
     end
 
     def enable_maintenance_mode
