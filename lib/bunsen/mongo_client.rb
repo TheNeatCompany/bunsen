@@ -8,10 +8,11 @@ module Bunsen
     def initialize(database, options = {})
       @options = {
         host: "localhost",
-        port: 27017
+        port: 27017,
+        op_timeout: 99999
       }.merge(options)
 
-      @client = Mongo::MongoClient.new(@options[:host], @options[:port], slave_ok: true)
+      @client = Mongo::MongoClient.new(@options[:host], @options[:port], slave_ok: true, op_timeout: 99999)
       @database = @client[database]
       @admin_database = @client["admin"]
     end
